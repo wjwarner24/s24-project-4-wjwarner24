@@ -185,7 +185,6 @@ public:
     /*
         read_thread(input, thread_id, process_id, priority):
             Reads in a thread from the simulation file. Called by read_process
-            for each thread in a process, as provided by the simulation file.
     */
     std::shared_ptr<Thread> read_thread(std::istream& input, int thread_id, int process_id, ProcessPriority priority);
 
@@ -202,6 +201,12 @@ public:
             then adds it to the event queue.
     */
     void add_event(std::shared_ptr<Event> event);
+
+    void get_thread_counts();
+
+    void get_idle_time();
+
+    void reset_stats();
 };
 
 #endif

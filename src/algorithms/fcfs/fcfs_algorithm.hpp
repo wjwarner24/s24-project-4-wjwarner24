@@ -27,6 +27,10 @@ public:
     //  Member functions
     //==================================================
 
+    std::queue<std::shared_ptr<Thread>> readyQueue;
+
+    int get_num_ready_threads();
+
     FCFSScheduler(int slice = -1);
 
     std::shared_ptr<SchedulingDecision> get_next_thread();
@@ -34,6 +38,9 @@ public:
     void add_to_ready_queue(std::shared_ptr<Thread> thread);
 
     size_t size() const;
+
+
+
 
 };
 

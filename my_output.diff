@@ -1,0 +1,32 @@
+9,11c9,11
+<     Total Count:                 20
+<     Avg. response time:       97.65
+<     Avg. turnaround time:   1193.90
+---
+>     Total Count:                  3
+>     Avg. response time:      111.00
+>     Avg. turnaround time:   1145.67
+14,16c14,16
+<     Total Count:                 15
+<     Avg. response time:      179.87
+<     Avg. turnaround time:    933.67
+---
+>     Total Count:                  4
+>     Avg. response time:      168.00
+>     Avg. turnaround time:    699.75
+24,25c24,25
+< Total service time:           4173
+< Total I/O time:               3422
+---
+> Total service time:            628
+> Total I/O time:                517
+27,30c27
+< Total idle time:             37883
+< 
+< CPU utilization:      1274826819192088064.00%
+< CPU efficiency:            200.00%
+---
+> Total idle time:                42
+31a29,30
+> CPU utilization:            97.10%
+> CPU efficiency:             43.40%

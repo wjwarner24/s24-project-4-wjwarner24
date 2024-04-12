@@ -78,6 +78,8 @@ public:
             you will need to modify this.
     */
     virtual ~Scheduler() {}
+
+    std::vector<std::shared_ptr<Thread>> threadList;
 };
 
 #endif

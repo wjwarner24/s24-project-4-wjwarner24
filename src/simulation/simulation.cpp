@@ -216,6 +216,12 @@ SystemStats Simulation::calculate_statistics() {
             - cpu_utilization
             - cpu_efficiency  
     */
+   //std::cout << "iter" << std::endl;
+   reset_stats();
+   get_thread_counts();
+   get_idle_time();
+   system_stats.cpu_utilization = ((system_stats.total_time - system_stats.total_idle_time) / system_stats.total_time) * 100;
+   system_stats.cpu_efficiency = (system_stats.total_service_time / system_stats.total_time) * 100;
     return this->system_stats;
 }
 
@@ -281,4 +287,83 @@ std::shared_ptr<Thread> Simulation::read_thread(std::istream& input, int thread_
     this->event_num++;
 
     return thread;
+}
+
+void Simulation::get_thread_counts() {
+    std::vector<std::shared_ptr<Thread>> tempThreadList = scheduler->threadList;
+   int arr_size = int (tempThreadList.size());
+   system_stats.thread_counts[0] = 0;
+   system_stats.thread_counts[1] = 0;
+   system_stats.thread_counts[2] = 0;
+   system_stats.thread_counts[3] = 0;
+    for (int i = 0; i < arr_size; i++) {
+        std::shared_ptr<Thread> thread = tempThreadList[i];
+        system_stats.total_service_time += thread->service_time;
+        system_stats.total_io_time += thread->io_time;
+       // system_stats.total_idle_time += thread->
+        if (thread->priority == ProcessPriority::SYSTEM) {
+            system_stats.thread_counts[0]++;
+            system_stats.avg_thread_response_times[0] += thread->response_time();
+            system_stats.avg_thread_turnaround_times[0] += thread->turnaround_time();
+        }
+        else if (thread->priority == ProcessPriority::INTERACTIVE) {
+            system_stats.thread_counts[1]++;
+            system_stats.avg_thread_response_times[1] += thread->response_time();
+            system_stats.avg_thread_turnaround_times[1] += thread->turnaround_time();
+        }
+        else if (thread->priority == ProcessPriority::NORMAL) {
+            system_stats.thread_counts[2]++;
+            system_stats.avg_thread_response_times[2] += thread->response_time();
+            system_stats.avg_thread_turnaround_times[2] += thread->turnaround_time();
+        }
+        else if (thread->priority == ProcessPriority::BATCH) {
+            system_stats.thread_counts[3]++;
+            system_stats.avg_thread_response_times[3] += thread->response_time();
+            system_stats.avg_thread_turnaround_times[3] += thread->turnaround_time();
+        }
+        else {
+            throw("Thread has no priority.");
+        }
+    }
+
+    for (int i = 0; i < 4; i++) {
+        if (system_stats.thread_counts[i] != 0) {
+            system_stats.avg_thread_response_times[i] /= system_stats.thread_counts[i];
+            system_stats.avg_thread_turnaround_times[i] /= system_stats.thread_counts[i];
+        }
+    }
+}
+
+void Simulation::get_idle_time() {
+    std::vector<std::shared_ptr<Thread>> tempThreadList = scheduler->threadList;
+    int arr_size = int (tempThreadList.size());
+    int totalBurstTime = 0;
+    int totalTurnaroundTime = 0;
+    for (int i = 0; i < arr_size; i++) {
+        std::shared_ptr<Thread> thread = tempThreadList[i];
+        totalTurnaroundTime += thread->turnaround_time();
+        std::queue<std::shared_ptr<Burst>> burstsCopy = thread->bursts;
+        while (!burstsCopy.empty()) {
+            totalBurstTime += burstsCopy.front()->length;
+            burstsCopy.pop();
+        }
+    }
+    system_stats.total_idle_time = totalTurnaroundTime - totalBurstTime;
+}
+
+void Simulation::reset_stats() {
+    system_stats.thread_counts[0] = 0;
+    system_stats.thread_counts[1] = 0;
+    system_stats.thread_counts[2] = 0;
+    system_stats.thread_counts[3] = 0;
+
+    system_stats.avg_thread_response_times[0] = 0;
+    system_stats.avg_thread_response_times[1] = 0;
+    system_stats.avg_thread_response_times[2] = 0;
+    system_stats.avg_thread_response_times[3] = 0;
+
+    system_stats.avg_thread_turnaround_times[0] = 0;
+    system_stats.avg_thread_turnaround_times[1] = 0;
+    system_stats.avg_thread_turnaround_times[2] = 0;
+    system_stats.avg_thread_turnaround_times[3] = 0;
 }
