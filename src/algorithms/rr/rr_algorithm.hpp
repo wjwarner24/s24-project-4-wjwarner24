@@ -36,6 +36,10 @@ public:
     void add_to_ready_queue(std::shared_ptr<Thread> thread);
 
     size_t size() const;
+
+    std::queue<std::shared_ptr<Thread>> readyQueue;
+
+    int get_num_ready_threads();
 };
 
 #endif

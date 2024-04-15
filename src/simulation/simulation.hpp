@@ -188,7 +188,7 @@ public:
     */
     std::shared_ptr<Thread> read_thread(std::istream& input, int thread_id, int process_id, ProcessPriority priority);
 
-    /*
+    /* TODO
         calculate_statistics():
             Calculates some useful statistics for the simulation, and stores them
             in a SystemStats object.
@@ -202,11 +202,12 @@ public:
     */
     void add_event(std::shared_ptr<Event> event);
 
-    void get_thread_counts();
+    // My methods below
 
-    void get_idle_time();
+    void add_stats(std::shared_ptr<Thread> thread);
 
-    void reset_stats();
+    void iterate_threads();
+
 };
 
 #endif

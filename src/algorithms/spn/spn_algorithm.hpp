@@ -40,6 +40,8 @@ public:
     
     int get_num_ready_threads();
 
+    int get_next_cpu_burst_length(std::shared_ptr<Thread> thread);
+
 };
 
 #endif

@@ -79,7 +79,6 @@ public:
     */
     virtual ~Scheduler() {}
 
-    std::vector<std::shared_ptr<Thread>> threadList;
 };
 
 #endif
