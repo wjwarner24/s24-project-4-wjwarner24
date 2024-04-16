@@ -44,6 +44,12 @@ public:
 
         size_t size() const;
 
+        Stable_Priority_Queue<std::shared_ptr<Thread>> priorityQueue;
+
+        int get_priority(std::shared_ptr<Thread> thread);
+
+        std::vector<int>*  get_num_threads();
+
 };
 
 #endif
