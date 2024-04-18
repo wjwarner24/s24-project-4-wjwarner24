@@ -15,7 +15,7 @@ void Thread::set_ready(int time) {
             this->io_time += time - this->state_change_time;
             break;
         default:
-            throw "Invalid transition to READY state.";
+            throw std::runtime_error("Invalid transition to READY state.");
             break;
     }
 
@@ -33,7 +33,7 @@ void Thread::set_running(int time) {
         this->current_state = RUNNING;
         this->state_change_time = time;
     } else {
-        throw "Invalid transition to RUNNING state.";
+        throw std::runtime_error("Invalid transition to RUNNING state.");
     }  
 }
 
@@ -44,7 +44,7 @@ void Thread::set_blocked(int time) {
         current_state = BLOCKED;
         state_change_time = time;
     } else {
-        throw "Invalid transition to BLOCKED state.";
+        throw std::runtime_error("Invalid transition to BLOCKED state.");
     } 
 }
 
@@ -58,7 +58,7 @@ void Thread::set_finished(int time) {
             this->current_state = EXIT;
             break;
         default:
-             throw "Invalid transition to EXIT state.";
+             throw std::runtime_error("Invalid transition to EXIT state.");
              break;
     } 
 }

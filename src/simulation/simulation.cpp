@@ -15,7 +15,7 @@
 
 Simulation::Simulation(FlagOptions flags)
 {
-    // TODO: Add your other algorithms as you make them
+    // DONE: Add your other algorithms as you make them
     if (flags.scheduler == "FCFS")
     {
         this->scheduler = std::make_shared<FCFSScheduler>();
@@ -34,11 +34,11 @@ Simulation::Simulation(FlagOptions flags)
     }
     else if (flags.scheduler == "MLFQ")
     {
-        this->scheduler = std::make_shared<MLFQScheduler>();
+        this->scheduler = std::make_shared<MLFQScheduler>(-1);
     }
     else
     {
-        throw("No scheduler found for " + flags.scheduler);
+        throw std::runtime_error("No scheduler found for " + flags.scheduler);
     }
     this->flags = flags;
     this->logger = Logger(flags.verbose, flags.per_thread, flags.metrics);
