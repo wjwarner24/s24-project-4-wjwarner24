@@ -34,7 +34,7 @@ Simulation::Simulation(FlagOptions flags)
     }
     else if (flags.scheduler == "MLFQ")
     {
-        this->scheduler = std::make_shared<MLFQScheduler>(-1);
+        this->scheduler = std::make_shared<MLFQScheduler>();
     }
     else
     {

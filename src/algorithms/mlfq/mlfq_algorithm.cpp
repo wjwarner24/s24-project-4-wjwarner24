@@ -25,9 +25,8 @@ MLFQScheduler::MLFQScheduler(int slice)
 std::shared_ptr<SchedulingDecision> MLFQScheduler::get_next_thread()
 {
     int index = 0;
-    Stable_Priority_Queue<std::shared_ptr<Thread>> nextQueue = queues.at(index);
 
-    while (nextQueue.empty())
+    while (queues.at(index).empty())
     {
         index++;
         if (index > 9)
@@ -39,16 +38,15 @@ std::shared_ptr<SchedulingDecision> MLFQScheduler::get_next_thread()
 
             return std::make_shared<SchedulingDecision>(emptyDecision);
         }
-        nextQueue = queues.at(index);
     }
-    std::shared_ptr<Thread> nextThread = nextQueue.top();
-    nextQueue.pop();
+    std::shared_ptr<Thread> nextThread = queues.at(index).top();
+    queues.at(index).pop();
     SchedulingDecision decision;
     decision.thread = nextThread;
     int priority = std::pow(2, index);
     decision.time_slice = priority;
     decision.explanation = "Selected from queue " + std::to_string(index) + " (priority = " + 
-                            std::to_string(get_priority(nextThread)) + ", runtime = " + std::to_string(priority - 1) + 
+                            get_priority_str(nextThread) + ", runtime = " + std::to_string(priority - 1) + 
                             "). Will run for at most " + std::to_string(priority) + " ticks.";
 
     return std::make_shared<SchedulingDecision>(decision);
@@ -67,7 +65,8 @@ void MLFQScheduler::add_to_ready_queue(std::shared_ptr<Thread> thread)
         // std::cout << "Key not found in the map." << std::endl;
         threadMap.insert(std::make_pair(key, 0));
     }
-    queues.at(threadMap[key]).push(get_priority(thread), thread);
+    int queueIndex = std::min(threadMap[key], 9);
+    queues.at(queueIndex).push(get_priority(thread), thread);
 }
 
 size_t MLFQScheduler::size() const
@@ -92,6 +91,22 @@ int MLFQScheduler::get_priority(std::shared_ptr<Thread> thread)
         return 2;
     case ProcessPriority::BATCH:
         return 3;
+    default:
+        throw std::runtime_error("Error getting priority");
+    }
+}
+
+std::string MLFQScheduler::get_priority_str(std::shared_ptr<Thread> thread) {
+    switch (thread->priority)
+    {
+    case ProcessPriority::SYSTEM:
+        return "SYSTEM";
+    case ProcessPriority::INTERACTIVE:
+        return "INTERACTIVE";
+    case ProcessPriority::NORMAL:
+        return "NORMAL";
+    case ProcessPriority::BATCH:
+        return "BATCH";
     default:
         throw std::runtime_error("Error getting priority");
     }
