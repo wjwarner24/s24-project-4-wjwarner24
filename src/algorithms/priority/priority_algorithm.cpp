@@ -67,7 +67,6 @@ int PRIORITYScheduler::get_priority(std::shared_ptr<Thread> thread) {
 }
 
 std::vector<int>* PRIORITYScheduler::get_num_threads() {
-    // Assuming there are a fixed number of priorities that matches the vector size.
     std::vector<int> *array = new std::vector<int>(4, 0); // Initialize vector with 4 zeros
     Stable_Priority_Queue<std::shared_ptr<Thread>> queueCopy = priorityQueue;
 
