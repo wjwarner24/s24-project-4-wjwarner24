@@ -159,6 +159,15 @@ public:
     */
     std::shared_ptr<Burst> pop_next_burst(BurstType type);
 
+
+    // My stuff
+
+    int mlfq_time = 0;
+
+    int last_queue_level = 0;
+
+    int prev_service_time = 0;
+
 };
 
 #endif

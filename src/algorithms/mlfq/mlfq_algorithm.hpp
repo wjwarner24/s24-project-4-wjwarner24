@@ -42,12 +42,11 @@ public:
     std::vector<Stable_Priority_Queue<std::shared_ptr<Thread>>> queues;
 
     // key is (processId, threadId)
-    std::map<std::pair<int, int>, int> threadMap;
+    //std::map<std::pair<int, int>, int> threadMap;
 
     int get_priority(std::shared_ptr<Thread> thread);
 
     std::string get_priority_str(std::shared_ptr<Thread> thread);
-
 
 };
 
