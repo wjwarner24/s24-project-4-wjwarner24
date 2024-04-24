@@ -164,7 +164,7 @@ public:
 
     int mlfq_time = 0;
 
-    int last_queue_level = 0;
+    int last_queue_level = -1;
 
     int prev_service_time = 0;
 

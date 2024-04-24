@@ -50,20 +50,22 @@ std::shared_ptr<SchedulingDecision> MLFQScheduler::get_next_thread()
     decision.time_slice = -1;
     decision.explanation = "Selected from queue " + std::to_string(index) + " (priority = " + 
                             get_priority_str(nextThread) + ", runtime = " + std::to_string(nextThread->mlfq_time) + 
-                            "). Will run for at most " + std::to_string((int) std::pow(2, index)) + " ticks.";
+                            "). Will run for at most " + std::to_string(time_slice) + " ticks.";
 
     return std::make_shared<SchedulingDecision>(decision);
-
-
 
 }
 
 void MLFQScheduler::add_to_ready_queue(std::shared_ptr<Thread> thread)
 {
-
+    if (thread->last_queue_level == -1) {
+        thread->last_queue_level = 0;
+        queues.at(thread->last_queue_level).push(get_priority(thread), thread);
+        return;
+    }
     thread->mlfq_time += thread->service_time - thread->prev_service_time;
-    if (thread->mlfq_time > std::pow(2, thread->last_queue_level)) { // or time_slice
-        thread->last_queue_level++;
+    if (thread->mlfq_time >= std::pow(2, thread->last_queue_level)) {
+        thread->last_queue_level += 1;
         thread->mlfq_time = 0;
     }
     queues.at(thread->last_queue_level).push(get_priority(thread), thread);
